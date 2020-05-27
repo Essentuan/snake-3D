@@ -30,6 +30,10 @@ let menu = {
   defaultResolution: {
     width: 1920,
     height: 977
+  },
+  load: function(element) {
+    $("menu").html(menu.loadedElements[element])
+    menu.onLoad()
   }
 }
 let settings = {

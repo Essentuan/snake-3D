@@ -4,10 +4,6 @@ menu.components.CSS3DObject = CSS3DObject
 menu.loadedElements.pause = $.loadHTML("./engine/menu/pause.html", false)
 menu.loadedElements.retry = $.loadHTML("./engine/menu/retry.html", false)
 menu.loadedElements.undefined = "<div></div>"
-menu.load = function(element) {
-    $("menu").html(menu.loadedElements[element])
-    menu.onLoad()
-}
 menu.renderer = new menu.components.CSS3DRenderer()
 menu.renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild(menu.renderer.domElement);
