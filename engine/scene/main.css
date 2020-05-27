@@ -1,0 +1,61 @@
+html, body {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  position: absolute;
+  z-index: 0!important;
+} 
+menu {
+  width: 100%;
+  height: 100%;
+}
+.CSSRenderer {
+  position: absolute;
+  z-index: 265!important;
+}
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.tabObject {
+  position: absolute
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.frameInput {
+  position: relative;
+  z-index: 324;
+}
+.speedInput {
+  position: relative;
+  z-index: 324;
+}
+.scaleInput {
+  position: relative;
+  z-index: 324;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  position: relative;
+  z-index: 325;
+}
+.uk-notification-message {
+  transform: scale(0.75)
+}
+.pickr {
+  top: -15px!important;
+  left: 10px!important;
+  transform: scale(0.75) translateY(0)!important
+}
+.pcr-app {
+  transform: scale(0.9)
+}

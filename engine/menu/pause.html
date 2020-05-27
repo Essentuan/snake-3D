@@ -1,0 +1,331 @@
+<div class="uk-card uk-card-default uk-card-body uk-width-1-2@m" style="height: 400px; width: 600px; position: absolute; top: 50%; left: 50%; transform: scale(2) translate(-25%, -33.4%)" id="pauseMenu">
+    <h2>Paused</h2>
+    <div id="Play" class="tabObject" style="right: 40%">
+        <div style="text-align: center">
+            <button class="uk-button uk-button-primary" onclick="game.unpause()">Resume</button><br><br>
+            <button class="uk-button uk-button-danger uk-button-small" onclick="game.restart()">Restart</button>
+        </div>
+    </div>
+    <div id="Game" class="tabObject" style="right: 40%">
+        <h6 class="text gray lighten-1">Game Speed</h6>
+        <div uk-grid>
+            <div>
+                <input class="uk-range speedInput" type="range" value="10" min="0" max="100" step="1" oninput="setSpeed(this)" id="speedRange">
+            </div>
+            <div style="position: relative; top: -20px; left: -25px">
+                <input class="uk-input speedInput" type="Number" value="10" style="width: 50px; transform: scale(0.75);" onfocusout="focusout(this)" onkeydown="return checkKeycode(event, 69, 190, 110, 107, 187, 109, 189)" oninput="setSpeed(this)" id="speedInput">
+            </div>
+        </div>
+        <h6 class="text gray lighten-1">Board Scale</h6>
+        <div uk-grid>
+            <div>
+                <input class="uk-range scaleInput" type="range" value="100" min="25" max="100" step="1" oninput="setScale(this)" id="scaleRange">
+            </div>
+            <div style="position: relative; top: -20px; left: -25px">
+                <input class="uk-input scaleInput" type="Number" value="10" style="width: 50px; transform: scale(0.75);" onfocusout="scaleout(this)" onkeydown="return checkKeycode(event, 69, 190, 110, 107, 187, 109, 189)" oninput="setScale(this)" id="scaleInput">
+            </div>
+        </div>
+    </div>
+    <div id="Video" class="tabObject" style="right: 40%">
+        <h6 class="text gray lighten-1">Shadow Quality</h6>
+        <button class="uk-button uk-button-default" type="button" id="shadowButton" style="text-align: center; margin: 0 auto; font-size: 0.75em">Nightmare</button>
+        <div uk-dropdown="mode: click" style="transform: scale(0.75)">
+            <ul class="uk-nav uk-dropdown-nav uk-dropdown-close">
+                <li><a href="#" onclick="changeShadowmap(this)">Off</a></li>
+                <li><a href="#" onclick="changeShadowmap(this)">Low</a></li>
+                <li><a href="#" onclick="changeShadowmap(this)">Medium</a></li>
+                <li><a href="#" onclick="changeShadowmap(this)">High</a></li>
+                <li><a href="#" onclick="changeShadowmap(this)">Ultra</a></li>
+                <li><a href="#" onclick="changeShadowmap(this)">Nightmare</a></li>
+            </ul>
+        </div>
+        <hr>
+        <h6 class="text gray lighten-1">Frame Rate</h6>
+        <div uk-grid>
+            <div>
+                <input class="uk-range frameInput" type="range" value="60" min="5" max="200" step="1" oninput="setFramerate(this)" id="frameRange">
+            </div>
+            <div style="position: relative; top: -20px; left: -25px">
+                <input class="uk-input frameInput" type="Number" value="60" style="width: 50px; transform: scale(0.75);" onfocusout="frameout(this)" onkeydown="return checkKeycode(event, 69, 190, 110, 107, 187, 109, 189)" oninput="setFramerate(this)" id="frameInput">
+            </div>
+        </div>
+    </div>
+    <div id="Bot" class="tabObject" style="right: 20%;">
+        <div style="text-align: center">
+            <h1>Work in Progress</h1>
+        </div>
+    </div>
+    <div id="Color" class="tabObject" style="right: 30%; width: 300px">
+        <div style="float: left">
+            <h4 class="text gray">Snake</h4>
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Head</h6>
+                <div class="snakeHead"></div>
+            </div>
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Tail</h6>
+                <div class="snakeTail"></div>
+            </div>
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Apple</h6>
+                <div class="snakeApple"></div>
+            </div>
+        </div>
+        <div style="float: right">
+            <h4 class="text gray">Board</h4>
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Background</h6>
+                <div class="boardBackground"></div>
+            </div>
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Grid</h6>
+                <div class="boardGrid"></div>
+            </div>
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Outline</h6>
+                <div class="boardOutline"></div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 20px">
+        <ul class="uk-tab-right" uk-tab style="width: 50px">
+            <li class="uk-active"><a onclick="selectTab(this.innerHTML)" style="width: 50px">Play</a></li>
+            <h6 class="text gray" style="padding-left: 15px; margin-top: 10px; margin-bottom: 1px; font-size: 0.67em">Settings</h6>
+            <li><a onclick="selectTab(this.innerHTML)" style="width: 50px">Game</a></li>
+            <li><a onclick="selectTab(this.innerHTML)" style="width: 50px">Video</a></li>
+            <li><a onclick="selectTab(this.innerHTML)" style="width: 50px">Bot</a></li>
+            <li><a onclick="selectTab(this.innerHTML)" style="width: 50px">Color</a></li>
+        </ul>
+    </div>
+</div>  
+<script>
+    menu.onLoad = function() {
+        $(".tabObject").css("display", "none")
+        $("#Play").css("display", "block")
+        $(".speedInput").val(game.settings.speed.unset)
+        $(".frameInput").val(frame.rate)
+        $(".scaleInput").val(localStorage.getItem("boardScale"))
+        let shadowQuality = localStorage.getItem("shadowQuality") || "Medium"
+        $("#shadowButton").html(shadowQuality.charAt(0).toUpperCase() + shadowQuality.slice(1))
+        $(".frameInput").val(parseInt(localStorage.getItem("framerate")) || 60)
+    }
+    function changeShadowmap(element) {
+        if ($("#shadowButton").html() != element.innerHTML) {
+            UIkit.notification("Some changes require you to reload the page to take effect", {pos: 'top-right'})
+            localStorage.setItem("shadowQuality", element.innerHTML.toLowerCase())
+            $("#shadowButton").html(element.innerHTML)
+        }
+    }
+    function checkKeycode(event) {
+        return (Array.from(arguments).slice(1)).indexOf(event.keyCode) === -1
+    }
+    function focusout(element) {
+        if (element.value > game.settings.speed.max) {
+            $(".speedInput").val(game.settings.speed.max)
+        } else if (element.value < game.settings.speed.min) {
+            $(".speedInput").val(game.settings.speed.min)
+        } else if (element.value == "") {
+            element.value = $("#speedRange").val()
+        } 
+        game.settings.speed.unset = parseInt(element.value)
+    }
+    function setSpeed(element) {
+        if (element.value != "" || element.id == "speedRange") {
+            $(".speedInput").val(element.value)
+            game.settings.speed.unset = parseInt(element.value)
+        }
+    }
+    function setScale(element) {
+        if (element.value != "" || element.id == "scaleRange") {
+            $(".scaleInput").val(element.value)
+            localStorage.setItem("boardScale", element.value)
+            
+        }
+    }
+    function scaleout(element) {
+        if (element.value > 100) {
+            $(".scaleInput").val(100)
+        } else if (element.value < 25) {
+            $(".scaleInput").val(25)
+        } else if (element.value == "") {
+            element.value = $("#scaleRange").val()
+        } 
+        frame.setDelta(parseInt(element.value))
+        localStorage.setItem("boardScale", element.value)
+    }
+    function frameout(element) {
+        if (element.value > 200) {
+            $(".frameInput").val(200)
+        } else if (element.value < 5) {
+            $(".frameInput").val(5)
+        } else if (element.value == "") {
+            element.value = $("#frameRange").val()
+        } 
+        frame.setDelta(parseInt(element.value))
+        localStorage.setItem("framerate", element.value)
+    }
+    function setFramerate(element) {
+        if (element.value != "" || element.id == "frameRange") {
+            $(".frameInput").val(element.value)
+            frame.setDelta(parseInt(element.value))
+            localStorage.setItem("framerate", element.value)
+            
+        }
+    }
+    selectTab = function(element) {
+        $(".tabObject").css("display", "none")
+        $("#" + element).css("display", "block")
+    }
+
+    //Color
+    Pickr.create({
+        el: '.snakeHead',
+        theme: 'monolith',
+        position: 'right-middle',
+        default: "#" + settings.colors.snake.head.toString(16),
+        components: {
+            preview: true,
+            comparison: false,
+            opacity: false,
+            hue: true,
+            interaction: {
+                hex: true,
+                rgba: true,
+                hsla: false,
+                hsva: false,
+                cmyk: false,
+                input: true,
+                clear: false,
+                save: true
+            }
+        }
+    }).on("save", function(color) {
+        localStorage.setItem("headColor", color.toHEXA().toString().slice(1))
+        UIkit.notification("Some changes require you to reload the page to take effect", {pos: 'top-right'})
+    })
+    Pickr.create({
+        el: '.snakeTail',
+        theme: 'monolith',
+        position: 'right-middle',
+        default: "#" + settings.colors.snake.tail.toString(16),
+        components: {
+            preview: true,
+            comparison: false,
+            opacity: false,
+            hue: true,
+            interaction: {
+                hex: true,
+                rgba: true,
+                hsla: false,
+                hsva: false,
+                cmyk: false,
+                input: true,
+                clear: false,
+                save: true
+            }
+        }
+    }).on("save", function(color) {
+        localStorage.setItem("tailColor", color.toHEXA().toString().slice(1))
+        UIkit.notification("Some changes require you to reload the page to take effect", {pos: 'top-right'})
+    })
+    Pickr.create({
+        el: '.snakeApple',
+        theme: 'monolith',
+        position: 'right-middle',
+        default: "#" + settings.colors.apple.toString(16),
+        components: {
+            preview: true,
+            comparison: false,
+            opacity: false,
+            hue: true,
+            interaction: {
+                hex: true,
+                rgba: true,
+                hsla: false,
+                hsva: false,
+                cmyk: false,
+                input: true,
+                clear: false,
+                save: true
+            }
+        }
+    }).on("save", function(color) {
+        localStorage.setItem("appleColor", color.toHEXA().toString().slice(1))
+        UIkit.notification("Some changes require you to reload the page to take effect", {pos: 'top-right'})
+    })
+    Pickr.create({
+        el: '.boardBackground',
+        theme: 'monolith',
+        position: 'right-middle',
+        default: "#" + settings.colors.board.background.toString(16),
+        components: {
+            preview: true,
+            comparison: false,
+            opacity: false,
+            hue: true,
+            interaction: {
+                hex: true,
+                rgba: true,
+                hsla: false,
+                hsva: false,
+                cmyk: false,
+                input: true,
+                clear: false,
+                save: true
+            }
+        }
+    }).on("save", function(color) {
+        localStorage.setItem("backgroundColor", color.toHEXA().toString().slice(1))
+        UIkit.notification("Some changes require you to reload the page to take effect", {pos: 'top-right'})
+    })
+    Pickr.create({
+        el: '.boardGrid',
+        theme: 'monolith',
+        position: 'right-middle',
+        default: "#" + settings.colors.board.grid.toString(16),
+        components: {
+            preview: true,
+            comparison: false,
+            opacity: false,
+            hue: true,
+            interaction: {
+                hex: true,
+                rgba: true,
+                hsla: false,
+                hsva: false,
+                cmyk: false,
+                input: true,
+                clear: false,
+                save: true
+            }
+        }
+    }).on("save", function(color) {
+        localStorage.setItem("gridColor", color.toHEXA().toString().slice(1))
+        UIkit.notification("Some changes require you to reload the page to take effect", {pos: 'top-right'})
+    })
+    Pickr.create({
+        el: '.boardOutline',
+        theme: 'monolith',
+        position: 'right-middle',
+        default: "#" + settings.colors.board.outline.toString(16),
+        components: {
+            preview: true,
+            comparison: false,
+            opacity: false,
+            hue: true,
+            interaction: {
+                hex: true,
+                rgba: true,
+                hsla: false,
+                hsva: false,
+                cmyk: false,
+                input: true,
+                clear: false,
+                save: true
+            }
+        }
+    }).on("save", function(color) {
+        localStorage.setItem("outlineColor", color.toHEXA().toString().slice(1))
+        UIkit.notification("Some changes require you to reload the page to take effect", {pos: 'top-right'})
+    })
+</script>
