@@ -13,7 +13,6 @@ menu.renderer = new menu.components.CSS3DRenderer()
 menu.renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild(menu.renderer.domElement);
 menu.renderer.domElement.classList.add("CSSRenderer");
-menu.load("pause")
 menu.object = new menu.components.CSS3DObject(document.getElementsByTagName("menu")[0])
 scene.add(menu.object)
 menu.object.rotation._order = "YXZ"
