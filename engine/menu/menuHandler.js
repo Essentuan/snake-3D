@@ -1,5 +1,4 @@
-let CSSURL = window.location.href + 'libraries/three.js/CSS3DRenderer.js'
-import {CSS3DRenderer, CSS3DObject} from CSSURL;
+import {CSS3DRenderer, CSS3DObject} from '/./libraries/three.js/CSS3DRenderer.js';
 menu.components.CSS3DRenderer = CSS3DRenderer
 menu.components.CSS3DObject = CSS3DObject
 menu.loadedElements.pause = $.loadHTML("./engine/menu/pause.html", false)
