@@ -104,7 +104,7 @@
         $("#Play").css("display", "block")
         $(".speedInput").val(game.settings.speed.unset)
         $(".frameInput").val(frame.rate)
-        $(".scaleInput").val(localStorage.getItem("boardScale"))
+        $(".scaleInput").val(localStorage.getItem("boardScale") || 100)
         let shadowQuality = localStorage.getItem("shadowQuality") || "Medium"
         $("#shadowButton").html(shadowQuality.charAt(0).toUpperCase() + shadowQuality.slice(1))
         $(".frameInput").val(parseInt(localStorage.getItem("framerate")) || 60)
