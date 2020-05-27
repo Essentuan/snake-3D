@@ -1,4 +1,5 @@
-import {CSS3DRenderer, CSS3DObject} from window.location.href + 'libraries/three.js/CSS3DRenderer.js';
+let CSSURL = window.location.href + 'libraries/three.js/CSS3DRenderer.js'
+import {CSS3DRenderer, CSS3DObject} from CSSURL;
 let position = new THREE.Vector3(1, 1, 1)
 menu.components.CSS3DRenderer = CSS3DRenderer
 menu.components.CSS3DObject = CSS3DObject
