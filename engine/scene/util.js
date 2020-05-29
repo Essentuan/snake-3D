@@ -118,3 +118,24 @@ function tryReturn(func, returnValue) {
         return returnValue
     }
 }
+function keybindFix(event) {
+    let output = "";
+    if (event.shiftKey && event.key != "Shift") {
+        output+= "Shift + "
+    }
+    if (event.ctrlKey && event.key != "Control") {
+        output+= "Control + "
+    }
+    if (event.altKey && event.key != "Alt") {
+        output+= "Alt + "  
+    }
+    let lookUp = {
+        ArrowUp: "Up Arrow",
+        ArrowDown: "Down Arrow",
+        ArrowRight: "Right Arrow",
+        ArrowLeft: "Left Arrow",
+        " ": "Space"
+    }
+    output+= lookUp[event.key] || event.key.charAt(0).toUpperCase() + event.key.slice(1)
+    return output
+} 

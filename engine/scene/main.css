@@ -43,6 +43,10 @@ input::-webkit-inner-spin-button {
   position: relative;
   z-index: 324;
 }
+.pathInput {
+  position: relative;
+  z-index: 324;
+}
 input[type=number] {
   -moz-appearance: textfield;
   position: relative;
@@ -58,4 +62,13 @@ input[type=number] {
 }
 .pcr-app {
   transform: scale(0.9)
+}
+.fpsCounter {
+  position: absolute; 
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 300;
+  padding: 7px;
+  color: lightgray
 }

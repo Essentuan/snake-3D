@@ -39,7 +39,6 @@
                 <li><a href="#" onclick="changeShadowmap(this)">Nightmare</a></li>
             </ul>
         </div>
-        <hr>
         <h6 class="text gray lighten-1">Frame Rate</h6>
         <div uk-grid>
             <div>
@@ -49,11 +48,28 @@
                 <input class="uk-input frameInput" type="Number" value="60" style="width: 50px; transform: scale(0.75);" onfocusout="frameout(this)" onkeydown="return checkKeycode(event, 69, 190, 110, 107, 187, 109, 189)" oninput="setFramerate(this)" id="frameInput">
             </div>
         </div>
+        <label><input class="uk-checkbox" type="checkbox" id="frameCheck" onclick='framerate(this)'> Framerate Counter</label>
     </div>
-    <div id="Bot" class="tabObject" style="right: 20%;">
-        <div style="text-align: center">
-            <h1>Work in Progress</h1>
+    <div id="Bot" class="tabObject" style="right: 40%">
+        <h6 class="text gray lighten-1">Bot Style</h6>
+        <button class="uk-button uk-button-default" type="button" id="botButton" style="text-align: center; margin: 0 auto; font-size: 0.75em">Simple</button>
+        <div uk-dropdown="mode: click" style="transform: scale(0.75)">
+            <ul class="uk-nav uk-dropdown-nav uk-dropdown-close">
+                <li><a href="#" onclick="changeBotType(this)" uk-tooltip="title: Slow but has a 100% completion rate.; pos: bottom">Simple</a></li>
+                <li><a href="#" onclick="changeBotType(this)" uk-tooltip="title: The advanced bot is not always consistent and may get stuck.; pos: bottom">Advanced</a></li>
+            </ul>
+        </div><br><br>
+        <label><input class="uk-checkbox" type="checkbox" id="botCheck" onclick='enableBot(this)'> Enable Bot</label>
+        <h6 class="text gray lighten-1">Path Quality</h6>
+        <div uk-grid uk-tooltip="title: Increasing path quality will cause it take longer to generate a hamiltonian cycle.; pos: bottom" style="height: 25px;">
+            <div>
+                <input class="uk-range pathInput" type="range" value="1" min="0" max="4" step="1" oninput="setPath(this)" id="pathRange">
+            </div>
+            <div style="position: relative; top: -20px; left: -25px">
+                <input class="uk-input pathInput" type="Number" value="1" style="width: 50px; transform: scale(0.75);" onfocusout="pathout(this)" onkeydown="return checkKeycode(event, 69, 190, 110, 107, 187, 109, 189)" oninput="setPath(this)" id="pathInput">
+            </div>
         </div>
+        <button class="uk-button uk-button-primary" style="margin-top: 20px" onclick="generatePath()">Generate Cycle</button>
     </div>
     <div id="Color" class="tabObject" style="right: 30%; width: 300px">
         <div style="float: left">
@@ -87,6 +103,28 @@
             </div>
         </div>
     </div>
+    <div id="Controls" class="tabObject" style="right: 30%; width: 300px">
+        <div style="float: left">
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Up</h6>
+                <input class="uk-input controlInput" type="keybind" value="W" onfocus="changeKeybind(this)" id="up" style="width: 90px; transform: scale(0.75);">
+            </div>
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Left</h6>
+                <input class="uk-input controlInput" type="keybind" value="A" onfocus="changeKeybind(this)" id="left" style="width: 90px; transform: scale(0.75);">
+            </div>
+        </div>
+        <div style="float: right">
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Down</h6>
+                <input class="uk-input controlInput" type="keybind" value="S" onfocus="changeKeybind(this)" id="down" style="width: 90px; transform: scale(0.75);">
+            </div>
+            <div style="margin-left: 20px">
+                <h6 class="text gray lighten-1" style="margin-top: 0px">Right</h6>
+                <input class="uk-input controlInput" type="keybind" value="D" onfocus="changeKeybind(this)" id="right" style="width: 90px; transform: scale(0.75);">
+            </div>
+        </div>
+    </div>
     <div style="margin-top: 20px">
         <ul class="uk-tab-right" uk-tab style="width: 50px">
             <li class="uk-active"><a onclick="selectTab(this.innerHTML)" style="width: 50px">Play</a></li>
@@ -95,6 +133,7 @@
             <li><a onclick="selectTab(this.innerHTML)" style="width: 50px">Video</a></li>
             <li><a onclick="selectTab(this.innerHTML)" style="width: 50px">Bot</a></li>
             <li><a onclick="selectTab(this.innerHTML)" style="width: 50px">Color</a></li>
+            <li><a onclick="selectTab(this.innerHTML)" style="width: 50px">Controls</a></li>
         </ul>
     </div>
 </div>  
@@ -108,12 +147,54 @@
         let shadowQuality = localStorage.getItem("shadowQuality") || "Medium"
         $("#shadowButton").html(shadowQuality.charAt(0).toUpperCase() + shadowQuality.slice(1))
         $(".frameInput").val(parseInt(localStorage.getItem("framerate")) || 60)
+        $("#frameCheck").prop('checked', JSON.parse(localStorage.getItem("frameCounter")) || false);
+        $(".pathInput").val(parseInt(localStorage.getItem("pathQuality") || "0"))
+        $("#botCheck").prop('checked', bot.active);
+        $("#botButton").html(bot.type.charAt(0).toUpperCase() + bot.type.slice(1))
+        $("#up").val(localStorage.getItem("up") || "W")
+        $("#left").val(localStorage.getItem("left") || "A")
+        $("#down").val(localStorage.getItem("down") || "S")
+        $("#right").val(localStorage.getItem("right") || "D")
+    }  
+    function changeKeybind(e) {
+        let element = $(e)
+        let keyHandler = $(window).keydown(function(e) {
+            if (element.is(":focus")) {
+                setTimeout(function() {
+                    element.val(keybindFix(e))
+                    game.settings.keybinds[element[0].id] = keybindFix(e)
+                    localStorage.setItem(element[0].id, keybindFix(e))
+                }, 1)
+            }
+        })
+    }
+    document.onkeydown = function (e) {
+        return false;
     }
     function changeShadowmap(element) {
         if ($("#shadowButton").html() != element.innerHTML) {
             UIkit.notification("Some changes require you to reload the page to take effect", {pos: 'top-right'})
             localStorage.setItem("shadowQuality", element.innerHTML.toLowerCase())
             $("#shadowButton").html(element.innerHTML)
+        }
+    }
+    function changeBotType(element) {
+        bot.type = element.innerHTML.toLowerCase()
+        $("#botButton").html(element.innerHTML)
+    }
+    function generatePath() {
+        let startTime = performance.now()
+        hamiltonian.storeCycle(board.getSize().maxWidth, board.getSize().maxHeight, parseInt(localStorage.getItem("pathQuality") || "0"))
+        let endTime = performance.now()
+        UIkit.notification("Finished generating hamiltonian cycle in " + ((endTime - startTime)/1000).fix(2) + " seconds.", {pos: 'top-right'})
+    }
+    function framerate(element) {
+        if ($(element).is(":checked")) {
+            $(".fpsCounter").css("display", "block")
+            localStorage.setItem("frameCounter", true)
+        } else {
+            $(".fpsCounter").css("display", "none")
+            localStorage.setItem("frameCounter", false)
         }
     }
     function checkKeycode(event) {
@@ -171,6 +252,30 @@
             localStorage.setItem("framerate", element.value)
             
         }
+    }
+    function enableBot(element) {
+        if (hamiltonian.storedPath != undefined) {
+            bot.active = $(element).is(":checked")
+        } else {
+            $(element).prop('checked', false)
+            UIkit.notification("You first must generate a hamiltonian cycle to enable the bot.", {pos: 'top-right'})
+        }
+    }
+    function pathout(element) {
+        if (element.value > 4) {
+            $(".patjInput").val(4)
+        } else if (element.value < 0) {
+            $(".pathInput").val(0)
+        } else if (element.value == "") {
+            element.value = $("#pathRange").val()
+        }     
+        localStorage.setItem("pathQuality", element.value)
+    }
+    function setPath(element) {
+        if (element.value != "" || element.id == "pathRange") {
+            $(".pathInput").val(element.value)
+            localStorage.setItem("pathQuality", element.value)
+        }    
     }
     selectTab = function(element) {
         $(".tabObject").css("display", "none")

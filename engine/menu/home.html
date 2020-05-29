@@ -1,14 +1,8 @@
 <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m" style="height: 400px; width: 600px; position: absolute; top: 50%; left: 50%; transform: scale(2) translate(-25%, -33.4%)" id="pauseMenu">
-    <h2>Retry</h2>
-    <div id="Play" class="tabObject" style="text-align: center; right: 20px">
-        <div>
-            <div>
-                <button class="uk-button uk-button-danger" onclick="game.restart()">Restart</button>
-            </div>  
-            <div>
-                <h2 style="margin-top: 30px; margin-bottom: 10px" id="scoreCount"></h2>
-                <h6 style="margin-top: 0px" id="deathComment"></h6>
-            </div> 
+    <h2>Home</h2>
+    <div id="Play" class="tabObject" style="right: 40%">
+        <div style="text-align: center">
+            <button class="uk-button uk-button-primary" onclick="game.unpause(); game.restart(); game.home = false">Start Game</button><br><br>
         </div>
     </div>
     <div id="Game" class="tabObject" style="right: 40%">
@@ -44,7 +38,6 @@
                 <li><a href="#" onclick="changeShadowmap(this)">Nightmare</a></li>
             </ul>
         </div>
-        <hr>
         <h6 class="text gray lighten-1">Frame Rate</h6>
         <div uk-grid>
             <div>
@@ -69,7 +62,7 @@
         <h6 class="text gray lighten-1">Path Quality</h6>
         <div uk-grid uk-tooltip="title: Increasing path quality will cause it take longer to generate a hamiltonian cycle.; pos: bottom" style="height: 25px;">
             <div>
-                <input class="uk-range pathInput" type="range" value="1" min="1" max="4" step="1" oninput="setPath(this)" id="pathRange">
+                <input class="uk-range pathInput" type="range" value="1" min="0" max="4" step="1" oninput="setPath(this)" id="pathRange">
             </div>
             <div style="position: relative; top: -20px; left: -25px">
                 <input class="uk-input pathInput" type="Number" value="1" style="width: 50px; transform: scale(0.75);" onfocusout="pathout(this)" onkeydown="return checkKeycode(event, 69, 190, 110, 107, 187, 109, 189)" oninput="setPath(this)" id="pathInput">
@@ -153,17 +146,15 @@
         let shadowQuality = localStorage.getItem("shadowQuality") || "Medium"
         $("#shadowButton").html(shadowQuality.charAt(0).toUpperCase() + shadowQuality.slice(1))
         $(".frameInput").val(parseInt(localStorage.getItem("framerate")) || 60)
-        $("#scoreCount").html("You died with a score of " + game.score + "!")
-        $("#deathComment").html(game.deathLines.random())
         $("#frameCheck").prop('checked', JSON.parse(localStorage.getItem("frameCounter")) || false);
-        $(".pathInput").val(parseInt(localStorage.getItem("pathQuality") || "1"))
+        $(".pathInput").val(parseInt(localStorage.getItem("pathQuality") || "0"))
         $("#botCheck").prop('checked', bot.active);
         $("#botButton").html(bot.type.charAt(0).toUpperCase() + bot.type.slice(1))
         $("#up").val(localStorage.getItem("up") || "W")
         $("#left").val(localStorage.getItem("left") || "A")
         $("#down").val(localStorage.getItem("down") || "S")
         $("#right").val(localStorage.getItem("right") || "D")
-    }
+    }  
     function changeKeybind(e) {
         let element = $(e)
         let keyHandler = $(window).keydown(function(e) {
@@ -175,6 +166,9 @@
                 }, 1)
             }
         })
+    }
+    document.onkeydown = function (e) {
+        return false;
     }
     function changeShadowmap(element) {
         if ($("#shadowButton").html() != element.innerHTML) {
@@ -189,7 +183,7 @@
     }
     function generatePath() {
         let startTime = performance.now()
-        hamiltonian.storeCycle(board.getSize().maxWidth, board.getSize().maxHeight, parseInt(localStorage.getItem("pathQuality") || "1"))
+        hamiltonian.storeCycle(board.getSize().maxWidth, board.getSize().maxHeight, parseInt(localStorage.getItem("pathQuality") || "0"))
         let endTime = performance.now()
         UIkit.notification("Finished generating hamiltonian cycle in " + ((endTime - startTime)/1000).fix(2) + " seconds.", {pos: 'top-right'})
     }
@@ -269,23 +263,25 @@
     function pathout(element) {
         if (element.value > 4) {
             $(".patjInput").val(4)
-        } else if (element.value < 1) {
-            $(".pathInput").val(1)
+        } else if (element.value < 0) {
+            $(".pathInput").val(0)
         } else if (element.value == "") {
             element.value = $("#pathRange").val()
         }     
-        localStorage.setItem("botQuality", element.value)
+        localStorage.setItem("pathQuality", element.value)
     }
     function setPath(element) {
         if (element.value != "" || element.id == "pathRange") {
             $(".pathInput").val(element.value)
-            localStorage.setItem("botQuality", element.value)
+            localStorage.setItem("pathQuality", element.value)
         }    
     }
     selectTab = function(element) {
         $(".tabObject").css("display", "none")
         $("#" + element).css("display", "block")
     }
+
+    //Color
     Pickr.create({
         el: '.snakeHead',
         theme: 'monolith',

@@ -64,7 +64,7 @@ let settings = {
 frame.setDelta(parseInt(localStorage.getItem("framerate")) || 60)
 
 light.directional.castShadow = true
-light.directional.position.set(5, 2.5, 4)
+light.directional.position.set(5, 2.5, 5)
 light.directional.shadow.mapSize.width = settings.shadow[settings.shadow.quality];
 light.directional.shadow.mapSize.height = settings.shadow[settings.shadow.quality];
 scene.add(light.directional)
@@ -74,7 +74,9 @@ camera.rotation.order = 'YXZ'
 camera.rotation.x = 0
 camera.rotation.y = new BigNumber(Math.PI).dividedBy(2).toNumber()
 camera.position.set(5, 0, 0)
-
+if (!(JSON.parse(localStorage.getItem("frameCounter")) || false)) {
+  $(".fpsCounter").css("display", "none")
+}
 gameLoaded = false
 gameCallback = function() {}
 
@@ -89,6 +91,9 @@ let updateScene = function () {
     frame.endTime = performance.now()
     frame.delta = new BigNumber(frame.endTime).minus(frame.startTime).toNumber()
     setTimeout(function() {
+      frame.visualEnd = performance.now()
+      frame.visualDelta = new BigNumber(frame.visualEnd).minus(frame.startTime).toNumber()
+      $(".fpsCounter").html((1000/Math.floor(frame.visualDelta)).fix(0) + " FPS")
       requestAnimationFrame(updateScene)
     }, Math.max(0, new BigNumber(frame.maxDelta).minus(frame.delta).toNumber()))
 };
