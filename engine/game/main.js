@@ -25,9 +25,9 @@ let game = {
     settings: {
         keybinds: {
             up: localStorage.getItem("up") || "W",
-            right: localStorage.getItem("right") || "A",
+            right: localStorage.getItem("right") || "D",
             down: localStorage.getItem("down") || "S",
-            left: localStorage.getItem("left") || "D"
+            left: localStorage.getItem("left") || "A"
         },
         speed: {
             unset: 10,
